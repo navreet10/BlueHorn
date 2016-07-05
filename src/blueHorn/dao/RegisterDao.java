@@ -1,5 +1,7 @@
 package blueHorn.dao;
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -19,7 +21,8 @@ public class RegisterDao {
 		user.setUsername(userName);
 		user.setUserpassword(pwd);
 		user.setMotto(motto);
-		user.setUseremail(userEmail);
+		user.setUseremail(userEmail);		
+		user.setJoindate(new Date());
 
 		em.persist(user);
 

@@ -10,7 +10,7 @@
 			<property name="javax.persistence.jdbc.user" value="ora1"/>
 			<property name="javax.persistence.jdbc.password" value="ora1"/>
 			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+			<!-- <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/> -->
 		</properties>
 	</persistence-unit>
 </persistence>

@@ -10,12 +10,14 @@ import java.util.Date;
  * 
  */
 @Entity
+@Table(name="Bhpost", schema="ora1")
 @NamedQuery(name="Bhpost.findAll", query="SELECT b FROM Bhpost b")
 public class Bhpost implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="BHPOST_POSTID_GENERATOR", sequenceName="BHPOST_ID_SEQ", allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="BHPOST_POSTID_GENERATOR")
 	private long postid;
 
 	@Temporal(TemporalType.DATE)

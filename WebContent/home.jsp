@@ -16,6 +16,23 @@ An ordered list:
 </ul>
 <p> My first para</p>
 <p> My second para</p>
-<p> <a href="">hello</a></p>
+<p> <a href="">Hello</a></p>
+<table>
+<tr> <th>Origin</th> <th>Food</th> <th>Rating</th>
+</tr>
+
+<tr><td>Balt</td> <td>carabes</td> <td>9</td> 
+</tr>
+
+<tr><td>Shoe</td> <td>carabes</td> <td>10</td> 
+</tr>
+
+<tr><td>BaBal</td> <td>Old</td> <td>11</td> 
+</tr>
+
+<tr><td>Miami</td> <td>Magoes</td> <td>12</td> 
+</tr>
+
+</table>
 </body>
 </html>

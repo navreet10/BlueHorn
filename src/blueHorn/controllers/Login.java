@@ -39,7 +39,9 @@ public class Login extends HttpServlet {
 		
 		try {
 			String userEmail= request.getParameter("email");
+			System.out.println(userEmail);
 			String pwd= request.getParameter("password");
+			System.out.println(pwd);
 			Bhuser user = dao.getUserByEmail(userEmail);
 			
 			if (user == null || !dao.isValidUser(user,pwd)) {
