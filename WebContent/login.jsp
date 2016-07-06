@@ -5,7 +5,7 @@
 <title>Login</title>
 </head>
 <body>
-<form action="Login" method="post">
+<form action="Home" method="post">
 <h6><span style="color: #ff0000"> ${message} </span></h6>
 <table>
 

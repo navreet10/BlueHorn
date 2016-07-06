@@ -1,27 +1,27 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import blueHorn.dao.BhuserDao;
 import blueHorn.models.Bhuser;
 
 /**
- * Servlet implementation class Profile
+ * Servlet implementation class EdituserProfile
  */
-@WebServlet("/Profile")
-public class Profile extends HttpServlet {
+@WebServlet("/EditUserProfile")
+public class EdituserProfile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+       
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public Profile() {
+    public EdituserProfile() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -29,7 +29,6 @@ public class Profile extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		doPost(request, response);
 	}
 
@@ -40,6 +39,22 @@ public class Profile extends HttpServlet {
 		try {
 			
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
+			String pwd = (String) request.getParameter("newPassword");
+			String motto = (String) request.getParameter("newMotto");
+			String email = (String) request.getParameter("newEmail");
+			String name = (String) request.getParameter("newName");
+			System.out.println("--->" + email + pwd+ motto);
+			if (motto!=null)
+				user.setMotto(motto);
+			if (email!=null)
+				user.setUseremail(email);
+			if (name!=null)
+				user.setUsername(name);
+			if (pwd!=null)
+				user.setUserpassword(pwd);
+			BhuserDao.update(user);
+			request.setAttribute("message", "Updates successful!!");
+			request.getSession().setAttribute("user", user);
 			request.setAttribute("pwd", user.getUserpassword());
 			request.setAttribute("motto", user.getMotto());
 			request.setAttribute("email", user.getUseremail());

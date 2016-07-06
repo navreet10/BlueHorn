@@ -1,19 +1,27 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import blueHorn.customTools.DBUtil;
+import blueHorn.customTools.MD5Util;
+import blueHorn.dao.BhpostDao;
 import blueHorn.dao.LoginDao;
+import blueHorn.models.Bhpost;
 import blueHorn.models.Bhuser;
 
 /**
  * Servlet implementation class Login
  */
-@WebServlet("/Login")
+@WebServlet("/Home")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private LoginDao dao = new LoginDao();
@@ -39,17 +47,27 @@ public class Login extends HttpServlet {
 		
 		try {
 			String userEmail= request.getParameter("email");
-			System.out.println(userEmail);
+			//System.out.println(userEmail);
 			String pwd= request.getParameter("password");
-			System.out.println(pwd);
+			//System.out.println(pwd);
 			Bhuser user = dao.getUserByEmail(userEmail);
+			String hash = MD5Util.md5Hex(userEmail);
+			String url = DBUtil.getGrUrl(20,hash);
 			
 			if (user == null || !dao.isValidUser(user,pwd)) {
 				request.setAttribute("message", "Credentials are wrong!!");
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 			} else {
 				HttpSession session = request.getSession();
+				List<Bhuser> table = new ArrayList<Bhuser>(); 
+				table.add(user);
+				List<Bhpost> posts= BhpostDao.postsofUser(userEmail);
+				String html = getTable(table);
+				
+				session.setAttribute("table", html);
 				session.setAttribute("user", user);
+				session.setAttribute("gUrl", url);
+				request.setAttribute("posts", posts);				
 				request.setAttribute("userName", user.getUsername());
 				request.getRequestDispatcher("home.jsp").forward(request, response);
 			}
@@ -60,6 +78,53 @@ public class Login extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+	}
+
+	private String getTable(List<Bhuser> table) {
+		StringBuilder html= new StringBuilder();
+		html.append("<table border =\"1\">");
+		html.append("<tr>");
+		
+		html.append("<td>");
+		html.append("User ID");
+		html.append("</td>");
+		
+		html.append("<td>");
+		html.append("User Name");
+		html.append("</td>");
+		
+		html.append("<td>");
+		html.append("User Email");
+		html.append("</td>");
+
+		
+		html.append("<td>");
+		html.append("Motto");
+		html.append("</td>");
+		
+		html.append("</tr>");
+		for (int i= 0; i < table.size(); i++) {
+			Bhuser user = table.get(i);
+			html.append("<tr>");
+			html.append("<td>");
+			html.append(user.getBhuserid());
+			html.append("</td>");
+			
+			html.append("<td>");
+			html.append(user.getUsername());
+			html.append("</td>");
+			
+			html.append("<td>");
+			html.append(user.getUseremail());
+			html.append("</td>");
+			
+			html.append("<td>");
+			html.append(user.getMotto());
+			html.append("</td>");
+			html.append("</tr>");
+		}
+		html.append("</table>");
+		return html.toString();
 	}
 
 }
