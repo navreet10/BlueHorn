@@ -1,7 +1,6 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,22 +8,25 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 import blueHorn.dao.BhpostDao;
 import blueHorn.models.Bhpost;
 import blueHorn.models.Bhuser;
 
 /**
- * Servlet implementation class NewsFeed
+ * Servlet implementation class Search
  */
-@WebServlet("/NewsFeed")
-public class NewsFeed extends HttpServlet {
+@WebServlet("/Search")
+public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Default constructor.
+	 * @see HttpServlet#HttpServlet()
 	 */
-	public NewsFeed() {
+	public Search() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -43,31 +45,30 @@ public class NewsFeed extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			String post = request.getParameter("post");
+		HttpSession session = request.getSession();
+		try {			
+			System.out.println("in Search");
+			String search = request.getParameter("search");
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
-			// System.out.println(pwd);
-			if (post !=null) {
-				Bhpost bhPost = new Bhpost();
-				
-				bhPost.setBhuser(user);
-				bhPost.setPostdate(new Date());
-				bhPost.setPosttext(post);
-				BhpostDao.insert(bhPost);
-			}			
-			List<Bhpost> posts = BhpostDao.getAllPosts();// postsofUser(user.getUseremail());
-			request.setAttribute("posts", posts);
-			request.setAttribute("userName", user.getUsername());
-			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
+			List<Bhpost> posts = BhpostDao.searchPosts(search);
+			session.setAttribute("postsSearch", posts);
+			session.setAttribute("userName", user.getUsername());
+			if (posts.size() ==0) {
+				session.setAttribute("messageSearch", "No Records!!");
+			} else {
+				session.setAttribute("messageSearch", "Search Results!!");
+			}
+			
 
 		} catch (NullPointerException e) {
-			List<Bhpost> posts = BhpostDao.getAllPosts();
-			request.setAttribute("posts", posts);
-			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
+			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
+			session.setAttribute("userName", user.getUsername());
+			session.setAttribute("messageSearch", "Something went wrong!!");
+			
 		} catch (Exception e) {
-			List<Bhpost> posts = BhpostDao.getAllPosts();
-			request.setAttribute("posts", posts);
-			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
+			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
+			session.setAttribute("userName", user.getUsername());
+			session.setAttribute("messageSearch", "Something went wrong!!");
 		}
 	}
 

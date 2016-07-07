@@ -121,12 +121,14 @@ public class BhpostDao {
         try{
             TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);
             query.setParameter("search", "%" + search + "%");
+            System.out.println(search);
             searchposts = query.getResultList();
         }catch (Exception e){
             e.printStackTrace();
         }finally{
             em.close();
-        }return searchposts;
+        }
+        return searchposts;
     }
 
 	public static List<Bhpost> getAllPosts() {

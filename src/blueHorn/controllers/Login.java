@@ -1,7 +1,6 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -47,26 +46,21 @@ public class Login extends HttpServlet {
 		
 		try {
 			String userEmail= request.getParameter("email");
-			//System.out.println(userEmail);
 			String pwd= request.getParameter("password");
-			//System.out.println(pwd);
 			Bhuser user = dao.getUserByEmail(userEmail);
 			String hash = MD5Util.md5Hex(userEmail);
 			String url = DBUtil.getGrUrl(20,hash);
+			String urlBig = DBUtil.getGrUrl(200,hash);
 			
 			if (user == null || !dao.isValidUser(user,pwd)) {
 				request.setAttribute("message", "Credentials are wrong!!");
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 			} else {
 				HttpSession session = request.getSession();
-				List<Bhuser> table = new ArrayList<Bhuser>(); 
-				table.add(user);
-				List<Bhpost> posts= BhpostDao.postsofUser(userEmail);
-				String html = getTable(table);
-				
-				session.setAttribute("table", html);
+				List<Bhpost> posts= BhpostDao.postsofUser(userEmail);							
 				session.setAttribute("user", user);
 				session.setAttribute("gUrl", url);
+				session.setAttribute("gBigUrl", urlBig);
 				request.setAttribute("posts", posts);				
 				request.setAttribute("userName", user.getUsername());
 				request.getRequestDispatcher("home.jsp").forward(request, response);

@@ -15,52 +15,97 @@
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
+<script src="javascripts/home.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="css/style.css" />
 <title>NewsFeed</title>
 </head>
 <body style="background: #F5F1F1; background-color: #F5F1F1;">
-<form action="NewsFeed" method="post">
+<form id = "target" action="NewsFeed" method="post">
 <div class="container">
+<br> <br>
 <jsp:include page="NavBar.jsp" />
+<c:set var="mes" scope="session" value="${message}" />
+				<c:if test="${mes != null}">
+					<div class="alert alert-success">
+						<strong>${message}</strong> <span id="showSearchTerm"></span>
+					</div>
+				</c:if>
  <div class="row">
-  <div class="col-sm-6"><table class="table table-bordered">
-  <tr><td><textarea id="post" name="post" placeholder="Say something.."></textarea> </td> 
-  <td><input type="submit" id="submit" name="submit" value="Post"> </td> 
-  </tr> </table>
-  </div>
-  <div class="col-sm-6"><table class="table table-bordered">
-  <tr><td><input size="20" id="search" name="search" placeholder="Search something.."></textarea> </td> 
-  <td><a href="<%=request.getContextPath()%>/Search"> Search</a></td> 
-  </tr> </table>
-  </div>
-  <br> <br>
-  <div class="col-sm-12"> <h2>Posts</h2>         
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Post date</th>
-        <th>Post</th>
-        <th>User</th>
-      </tr>
-    </thead>
-    <tbody>
-     <c:forEach var="post" items="${posts}">
-      <tr>
-        <td><fmt:formatDate type="date" 
-            value="${post.postdate}" /></td>
-        <td><c:out value="${post.posttext}"></c:out></td>
-        <td><c:out value="${post.bhuser.username}"></c:out></td>
-      </tr>
-      </c:forEach>
-      
-    </tbody>
-  </table></div>											
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<div align="left">New Post</div>
+
+							</div>
+							<div class="panel-body">
+								<textarea maxlength="141" id="post" name="post" placeholder="Say something"></textarea>
+							</div>
+							<div class="panel-footer">
+							<div id="text"> </div> 
+								<div align="right">
+									<input type="submit" id="submit" name="submit" value="Post"></input>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+   
+  <div class="row">
+					<br> <br>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						<h2>Posts</h2>
+
+						<div class="panel-group">
+							<c:forEach var="post" items="${posts}">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<table width="100%">
+											<tr>
+												<td align="left">${post.bhuser.username}</td>
+												<td align="right">  <fmt:formatDate type="date"
+														value="${post.postdate}" /></td>
+											</tr>
+										</table>
+
+									</div>
+									<div class="panel-body">
+										<c:out value="${post.posttext}"></c:out>
+									</div>
+									<div class="panel-footer">
+										<table width="100%">
+											<tr>
+												<td align="left"><a href="#"> <span
+														class="glyphicon glyphicon-heart"></span>
+												</a></td>
+												<td align="right"><span
+													class="glyphicon glyphicon-share-alt"></span> Reply</td>
+											</tr>
+										</table>
+
+									</div>
+								</div>
+								<br><br>
+							</c:forEach>
+
+
+						</div>
+
+
+					</div>
+					<div class="col-sm-3"></div>
+					
+				</div>										
 </div>
 
-</div>
+
 </form>
 
 </body>
