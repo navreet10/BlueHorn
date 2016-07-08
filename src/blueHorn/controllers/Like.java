@@ -1,8 +1,8 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import blueHorn.dao.BhpostDao;
 import blueHorn.models.Bhpost;
@@ -17,47 +18,49 @@ import blueHorn.models.BhpostComments;
 import blueHorn.models.Bhuser;
 
 /**
- * Servlet implementation class Home
+ * Servlet implementation class Like
  */
-@WebServlet("/HomePosts")
-public class Home extends HttpServlet {
+@WebServlet("/Like")
+public class Like extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Like() {
+        super();
+    }
 
 	/**
-	 * Default constructor.
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	public Home() {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request,response);
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doPost(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
-			String post = request.getParameter("post");
-			if (post != null && post != "") {
-				Bhpost bhPost = new Bhpost();				
-				bhPost.setBhuser(user);
-				bhPost.setPostdate(new Date());
-				bhPost.setPosttext(post);
-				BhpostDao.insert(bhPost);
-			}			
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String idPost = request.getParameter("idPost");
+		System.out.println("in");
+		try {	
+			
+			String postId = idPost.substring(8);
+			Bhuser user = (Bhuser)session.getAttribute("user");
+			Bhpost post = BhpostDao.getPost(Long.parseLong(postId));
+			post.setLikes(post.getLikes().add(new BigDecimal(1)));
+			BhpostDao.update(post);
 			List<BhpostComments> posts = new ArrayList<BhpostComments>();
 			List<Bhpost> postsMain = null;
-			postsMain = BhpostDao.postsofUser(user.getUseremail());
+			if (idPost.contains("home")) {
+				postsMain = BhpostDao.postsofUser(user.getUseremail());
 				
+				
+			} else {
+				postsMain = BhpostDao.getAllPosts();
+			}
 			for (Bhpost p: postsMain) {
 				BhpostComments postCom = new BhpostComments();
 				List<Bhpost> res = BhpostDao.getComments(p);
@@ -67,16 +70,19 @@ public class Home extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			request.setAttribute("postsHome", posts);
-			request.setAttribute("userName", user.getUsername());
-			request.getRequestDispatcher("home.jsp").forward(request, response);
+			session.setAttribute("postsHome", posts);
 
 		} catch (NullPointerException e) {
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
 			List<BhpostComments> posts = new ArrayList<BhpostComments>();
 			List<Bhpost> postsMain = null;
-			postsMain = BhpostDao.postsofUser(user.getUseremail());
+			if (idPost.contains("home")) {
+				postsMain = BhpostDao.postsofUser(user.getUseremail());
 				
+				
+			} else {
+				postsMain = BhpostDao.getAllPosts();
+			}
 			for (Bhpost p: postsMain) {
 				BhpostComments postCom = new BhpostComments();
 				List<Bhpost> res = BhpostDao.getComments(p);
@@ -86,15 +92,19 @@ public class Home extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			request.setAttribute("postsHome", posts);
-			request.setAttribute("userName", user.getUsername());
-			request.getRequestDispatcher("home.jsp").forward(request, response);
+			session.setAttribute("postsHome", posts);
+			
 		} catch (Exception e) {
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
 			List<BhpostComments> posts = new ArrayList<BhpostComments>();
 			List<Bhpost> postsMain = null;
-			postsMain = BhpostDao.postsofUser(user.getUseremail());
+			if (idPost.contains("home")) {
+				postsMain = BhpostDao.postsofUser(user.getUseremail());
 				
+				
+			} else {
+				postsMain = BhpostDao.getAllPosts();
+			}
 			for (Bhpost p: postsMain) {
 				BhpostComments postCom = new BhpostComments();
 				List<Bhpost> res = BhpostDao.getComments(p);
@@ -104,9 +114,7 @@ public class Home extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			request.setAttribute("postsHome", posts);
-			request.setAttribute("userName", user.getUsername());
-			request.getRequestDispatcher("home.jsp").forward(request, response);
+			session.setAttribute("postsHome", posts);
 		}
 	}
 

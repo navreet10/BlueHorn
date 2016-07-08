@@ -1,6 +1,7 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,12 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import blueHorn.customTools.DBUtil;
-import blueHorn.customTools.MD5Util;
 import blueHorn.dao.BhpostDao;
 import blueHorn.dao.LoginDao;
 import blueHorn.models.Bhpost;
+import blueHorn.models.BhpostComments;
 import blueHorn.models.Bhuser;
 
 /**
@@ -47,22 +46,31 @@ public class Login extends HttpServlet {
 		try {
 			String userEmail= request.getParameter("email");
 			String pwd= request.getParameter("password");
-			Bhuser user = dao.getUserByEmail(userEmail);
-			String hash = MD5Util.md5Hex(userEmail);
-			String url = DBUtil.getGrUrl(20,hash);
-			String urlBig = DBUtil.getGrUrl(200,hash);
+			Bhuser user = dao.getUserByEmail(userEmail);		
 			
 			if (user == null || !dao.isValidUser(user,pwd)) {
 				request.setAttribute("message", "Credentials are wrong!!");
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 			} else {
 				HttpSession session = request.getSession();
-				List<Bhpost> posts= BhpostDao.postsofUser(userEmail);							
+				List<BhpostComments> posts = new ArrayList<BhpostComments>();
+				List<Bhpost> postsMain = null;
+				postsMain = BhpostDao.postsofUser(user.getUseremail());
+					
+				for (Bhpost p: postsMain) {
+					BhpostComments postCom = new BhpostComments();
+					List<Bhpost> res = BhpostDao.getComments(p);
+					postCom.setMainPost(p);
+					postCom.setComments(res);
+					if (res !=null){
+						posts.add(postCom);
+					}					
+				}							
 				session.setAttribute("user", user);
-				session.setAttribute("gUrl", url);
-				session.setAttribute("gBigUrl", urlBig);
-				request.setAttribute("posts", posts);				
-				request.setAttribute("userName", user.getUsername());
+				session.setAttribute("gUrl", user.getUrl()+20);
+				session.setAttribute("gBigUrl", user.getUrl()+200);
+				request.setAttribute("postsHome", posts);				
+				session.setAttribute("userName", user.getUsername());
 				request.getRequestDispatcher("home.jsp").forward(request, response);
 			}
 			
@@ -74,7 +82,7 @@ public class Login extends HttpServlet {
 		} 
 	}
 
-	private String getTable(List<Bhuser> table) {
+	/*private String getTable(List<Bhuser> table) {
 		StringBuilder html= new StringBuilder();
 		html.append("<table border =\"1\">");
 		html.append("<tr>");
@@ -119,6 +127,6 @@ public class Login extends HttpServlet {
 		}
 		html.append("</table>");
 		return html.toString();
-	}
+	}*/
 
 }

@@ -47,7 +47,6 @@ public class Search extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		try {			
-			System.out.println("in Search");
 			String search = request.getParameter("search");
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
 			List<Bhpost> posts = BhpostDao.searchPosts(search);

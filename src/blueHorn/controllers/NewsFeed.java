@@ -1,6 +1,7 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import blueHorn.dao.BhpostDao;
 import blueHorn.models.Bhpost;
+import blueHorn.models.BhpostComments;
 import blueHorn.models.Bhuser;
 
 /**
@@ -46,8 +48,7 @@ public class NewsFeed extends HttpServlet {
 		try {
 			String post = request.getParameter("post");
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
-			// System.out.println(pwd);
-			if (post !=null) {
+			if (post !=null && post != "") {
 				Bhpost bhPost = new Bhpost();
 				
 				bhPost.setBhuser(user);
@@ -55,17 +56,53 @@ public class NewsFeed extends HttpServlet {
 				bhPost.setPosttext(post);
 				BhpostDao.insert(bhPost);
 			}			
-			List<Bhpost> posts = BhpostDao.getAllPosts();// postsofUser(user.getUseremail());
+			List<BhpostComments> posts = new ArrayList<BhpostComments>();
+			List<Bhpost> postsMain = null;
+			postsMain = BhpostDao.getAllPosts();
+				
+			for (Bhpost p: postsMain) {
+				BhpostComments postCom = new BhpostComments();
+				List<Bhpost> res = BhpostDao.getComments(p);
+				postCom.setMainPost(p);
+				postCom.setComments(res);
+				if (res !=null){
+					posts.add(postCom);
+				}					
+			}
 			request.setAttribute("posts", posts);
 			request.setAttribute("userName", user.getUsername());
 			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
 
 		} catch (NullPointerException e) {
-			List<Bhpost> posts = BhpostDao.getAllPosts();
+			List<BhpostComments> posts = new ArrayList<BhpostComments>();
+			List<Bhpost> postsMain = null;
+			postsMain = BhpostDao.getAllPosts();
+				
+			for (Bhpost p: postsMain) {
+				BhpostComments postCom = new BhpostComments();
+				List<Bhpost> res = BhpostDao.getComments(p);
+				postCom.setMainPost(p);
+				postCom.setComments(res);
+				if (res !=null){
+					posts.add(postCom);
+				}					
+			}
 			request.setAttribute("posts", posts);
 			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
 		} catch (Exception e) {
-			List<Bhpost> posts = BhpostDao.getAllPosts();
+			List<BhpostComments> posts = new ArrayList<BhpostComments>();
+			List<Bhpost> postsMain = null;
+			postsMain = BhpostDao.getAllPosts();
+				
+			for (Bhpost p: postsMain) {
+				BhpostComments postCom = new BhpostComments();
+				List<Bhpost> res = BhpostDao.getComments(p);
+				postCom.setMainPost(p);
+				postCom.setComments(res);
+				if (res !=null){
+					posts.add(postCom);
+				}					
+			}
 			request.setAttribute("posts", posts);
 			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
 		}

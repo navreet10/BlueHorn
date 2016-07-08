@@ -11,20 +11,21 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="Bhuser", schema="ora1")
 @NamedQuery(name="Bhuser.findAll", query="SELECT b FROM Bhuser b")
 public class Bhuser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="BHUSER_BHUSERID_GENERATOR", sequenceName="BHUSER_ID_SEQ", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.AUTO, generator="BHUSER_BHUSERID_GENERATOR")
+	@SequenceGenerator(name="BHUSER_BHUSERID_GENERATOR", sequenceName="BHUSER_ID_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BHUSER_BHUSERID_GENERATOR")
 	private long bhuserid;
 
 	@Temporal(TemporalType.DATE)
 	private Date joindate;
 
 	private String motto;
+
+	private String url;
 
 	private String useremail;
 
@@ -61,6 +62,14 @@ public class Bhuser implements Serializable {
 
 	public void setMotto(String motto) {
 		this.motto = motto;
+	}
+
+	public String getUrl() {
+		return this.url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public String getUseremail() {

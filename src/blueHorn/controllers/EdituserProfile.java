@@ -43,7 +43,7 @@ public class EdituserProfile extends HttpServlet {
 			String motto = (String) request.getParameter("newMotto");
 			String email = (String) request.getParameter("newEmail");
 			String name = (String) request.getParameter("newName");
-			System.out.println("--->" + email + pwd+ motto);
+			
 			if (motto!=null)
 				user.setMotto(motto);
 			if (email!=null)
@@ -59,6 +59,7 @@ public class EdituserProfile extends HttpServlet {
 			request.setAttribute("motto", user.getMotto());
 			request.setAttribute("email", user.getUseremail());
 			request.setAttribute("name", user.getUsername());
+			request.getSession().setAttribute("user",user);
 			request.getRequestDispatcher("userProfile.jsp").forward(request, response);
 
 		} catch (NullPointerException e) {			

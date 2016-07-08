@@ -1,6 +1,6 @@
 package blueHorn.dao;
 
-import java.util.Date;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -10,26 +10,16 @@ import blueHorn.models.Bhuser;
 
 public class RegisterDao {
 
-	public Bhuser addUser(String userEmail, String pwd, String userName, String motto) {
+	public Bhuser addUser(Bhuser user) {
 		
 		EntityManager em = DBUtil.getEmfFactory().createEntityManager();
 		Bhuser user1 = null;
 		try {
-		em.getTransaction().begin();
-
-		Bhuser user = new Bhuser();
-		user.setUsername(userName);
-		user.setUserpassword(pwd);
-		user.setMotto(motto);
-		user.setUseremail(userEmail);		
-		user.setJoindate(new Date());
-
+		em.getTransaction().begin();	
 		em.persist(user);
-
-		em.getTransaction().commit();
-		
+		em.getTransaction().commit();		
 		LoginDao dao = new LoginDao();
-		user1 = dao.getUserByEmail(userEmail);
+		user1 = dao.getUserByEmail(user.getUseremail());
 			
 		} catch (NoResultException e) {
 			e.printStackTrace();

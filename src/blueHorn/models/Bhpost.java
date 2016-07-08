@@ -2,6 +2,7 @@ package blueHorn.models;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -10,15 +11,18 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="Bhpost", schema="ora1")
 @NamedQuery(name="Bhpost.findAll", query="SELECT b FROM Bhpost b")
 public class Bhpost implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@SequenceGenerator(name="BHPOST_POSTID_GENERATOR", sequenceName="BHPOST_ID_SEQ", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.AUTO, generator="BHPOST_POSTID_GENERATOR")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BHPOST_POSTID_GENERATOR")
 	private long postid;
+
+	private BigDecimal likes;
+
+	private BigDecimal parentid;
 
 	@Temporal(TemporalType.DATE)
 	private Date postdate;
@@ -39,6 +43,22 @@ public class Bhpost implements Serializable {
 
 	public void setPostid(long postid) {
 		this.postid = postid;
+	}
+
+	public BigDecimal getLikes() {
+		return this.likes;
+	}
+
+	public void setLikes(BigDecimal likes) {
+		this.likes = likes;
+	}
+
+	public BigDecimal getParentid() {
+		return this.parentid;
+	}
+
+	public void setParentid(BigDecimal parentid) {
+		this.parentid = parentid;
 	}
 
 	public Date getPostdate() {

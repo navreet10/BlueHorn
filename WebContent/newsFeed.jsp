@@ -67,10 +67,11 @@
 							<c:forEach var="post" items="${posts}">
 								<div class="panel panel-primary">
 									<div class="panel-heading">
+										<c:set var="pUrl" scope="request" value="${post.bhuser.url}20"></c:set>
 										<table width="100%">
 											<tr>
-												<td align="left">${post.bhuser.username}</td>
-												<td align="right">  <fmt:formatDate type="date"
+												<td align="left"><img src="${pUrl}" />${post.bhuser.username}</td>
+												<td align="right"><fmt:formatDate type="date"
 														value="${post.postdate}" /></td>
 											</tr>
 										</table>

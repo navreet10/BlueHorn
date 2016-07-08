@@ -75,7 +75,8 @@ public class BhpostDao {
     {
         EntityManager em = DBUtil.getEmfFactory().createEntityManager();
         List<Bhpost> userposts = null;
-        String qString = "select b from Bhpost b where b.bhuser.bhuserid = :userid";
+        String qString = "select b from Bhpost b where b.bhuser.bhuserid = :userid "
+        		+ "and b.parentid = -1";
         
         try{
             TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);
@@ -95,7 +96,7 @@ public class BhpostDao {
         List<Bhpost> userposts = null;
         //List<Bhpost> posts = null;
         String qString = "select b from Bhpost b "
-                + "where b.bhuser.useremail = :useremail";
+                + "where b.bhuser.useremail = :useremail and b.parentid = -1";
         
         try{
             TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);
@@ -121,7 +122,6 @@ public class BhpostDao {
         try{
             TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);
             query.setParameter("search", "%" + search + "%");
-            System.out.println(search);
             searchposts = query.getResultList();
         }catch (Exception e){
             e.printStackTrace();
@@ -134,7 +134,7 @@ public class BhpostDao {
 	public static List<Bhpost> getAllPosts() {
 		EntityManager em = DBUtil.getEmfFactory().createEntityManager();
         List<Bhpost> userposts = null;
-        String qString = "select b from Bhpost b";
+        String qString = "select b from Bhpost b and b.parentid = -1";
         
         try{
             TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);
@@ -148,6 +148,42 @@ public class BhpostDao {
                 em.close();
             }
         return userposts;  
+	}
+
+	public static Bhpost getPost(long postId) {
+		EntityManager em = DBUtil.getEmfFactory().createEntityManager();
+        String qString = "select b from Bhpost b where b.postid = :postId";
+        
+        Bhpost post = new Bhpost();
+        try{
+            TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);
+            query.setParameter("postId", postId);
+            post = query.getSingleResult();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        finally{
+                em.close();
+            }
+		return post;
+	}
+
+	public static List<Bhpost> getComments(Bhpost p) {
+		EntityManager em = DBUtil.getEmfFactory().createEntityManager();
+        String qString = "select b from Bhpost b where b.parentid = :pId";
+        
+        List<Bhpost> post = null;
+        try{
+            TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);
+            query.setParameter("pId", p.getPostid());
+            post = query.getResultList();
+        }catch (Exception e){
+            return null;
+        }
+        finally{
+                em.close();
+            }
+		return post;
 	}
 
 }

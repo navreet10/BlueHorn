@@ -10,8 +10,8 @@ public class DBUtil {
 		return emf;
 	}
 
-	public static String getGrUrl(int size, String hash) {
-		return "https://www.gravatar.com/avatar/" + hash + "?s="+size;
+	public static String getGrUrl(String hash) {
+		return "https://www.gravatar.com/avatar/" + hash + "?s=";
 	}
 
 }

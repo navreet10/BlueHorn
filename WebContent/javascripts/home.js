@@ -4,6 +4,8 @@
 
  $(document).ready(function(){
 	 var rem = 141;
+	 $('.repliesDiv').hide();
+	 $('.commentsDiv').hide();
 	 $("#text").html(rem + " characters remaining");
 	 $("#post").keyup(function() {
 		 var rem = 141 - $("#post").val().length;
@@ -30,5 +32,57 @@
 		  }
 		  
 		});
+	 var called = false;
+	 $('.likeLinks').click(function (event) {
+		 if (!called) {
+			 var idPost = $(this).attr('id');
+			 var dataString ='idPost='+ idPost;
+			 $.ajax({  
+				    type: "POST",  
+				    url: "Like",
+	             data: dataString,
+	             success: function(data){
+	                 window.location = 'http://localhost:8080/BlueHorn/home.jsp';
+	               }                
+				  });
+			 called = true;
+		 }
+		 
+		 
+	 });
+	 $('.replyLinks').click(function (event) {
+			 var idPost = $(this).attr('id');
+			 var id = 'writeReply' + idPost.substring(9);
+			 $("#"+id).show();
+		 
+		 
+	 });
+	 $('.replyButton').click(function (event) {
+			 var idPost = $(this).attr('id');
+			 var id = 'replyContenet' + idPost.substring(12);
+			 var dataString ='idPost='+ idPost + "&posttext=" + $ ("#" + id).val();
+			 
+			 $.ajax({  
+				    type: "POST",  
+				    url: "Reply",
+	             data: dataString,
+	             success: function(data){
+	                 window.location = 'http://localhost:8080/BlueHorn/home.jsp';
+	               }                
+				  });
+			
+		 
+		 
+	 });
+	 $('.commentLinks').click(function (event) {
+		
+			 var idPost = $(this).attr('id');
+			 var id = 'seeComments'+idPost.substring(8);
+			 
+			 $("#"+id).show();	
+			 
+		 
+		 
+	 });
 }); 
 
