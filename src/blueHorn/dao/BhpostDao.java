@@ -134,7 +134,7 @@ public class BhpostDao {
 	public static List<Bhpost> getAllPosts() {
 		EntityManager em = DBUtil.getEmfFactory().createEntityManager();
         List<Bhpost> userposts = null;
-        String qString = "select b from Bhpost b and b.parentid = -1";
+        String qString = "select b from Bhpost b where b.parentid = -1";
         
         try{
             TypedQuery<Bhpost> query = em.createQuery(qString,Bhpost.class);

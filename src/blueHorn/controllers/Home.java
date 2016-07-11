@@ -1,6 +1,7 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,8 @@ public class Home extends HttpServlet {
 				bhPost.setBhuser(user);
 				bhPost.setPostdate(new Date());
 				bhPost.setPosttext(post);
+				bhPost.setParentid(new BigDecimal(-1));
+				bhPost.setLikes(new BigDecimal(0));
 				BhpostDao.insert(bhPost);
 			}			
 			List<BhpostComments> posts = new ArrayList<BhpostComments>();

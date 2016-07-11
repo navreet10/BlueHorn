@@ -1,6 +1,7 @@
 package blueHorn.controllers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +55,8 @@ public class NewsFeed extends HttpServlet {
 				bhPost.setBhuser(user);
 				bhPost.setPostdate(new Date());
 				bhPost.setPosttext(post);
+				bhPost.setParentid(new BigDecimal(-1));
+				bhPost.setLikes(new BigDecimal(0));
 				BhpostDao.insert(bhPost);
 			}			
 			List<BhpostComments> posts = new ArrayList<BhpostComments>();
@@ -69,7 +72,7 @@ public class NewsFeed extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			request.setAttribute("posts", posts);
+			request.setAttribute("postsNews", posts);
 			request.setAttribute("userName", user.getUsername());
 			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
 
@@ -87,7 +90,7 @@ public class NewsFeed extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			request.setAttribute("posts", posts);
+			request.setAttribute("postsNews", posts);
 			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
 		} catch (Exception e) {
 			List<BhpostComments> posts = new ArrayList<BhpostComments>();
@@ -103,7 +106,7 @@ public class NewsFeed extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			request.setAttribute("posts", posts);
+			request.setAttribute("postsNews", posts);
 			request.getRequestDispatcher("newsFeed.jsp").forward(request, response);
 		}
 	}

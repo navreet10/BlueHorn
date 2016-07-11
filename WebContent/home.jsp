@@ -112,11 +112,11 @@
 
 									</div>
 									<div>
-									<table>
+									<table width="100%">
 									<tr><td>
 													<div class = "repliesDiv"
 														id="writeReply${post.mainPost.postid}">
-														<div class="panel panel-primary">
+														<div class="panel panel-info">
 														<div class="panel-heading">
 																	<div class="panel-heading">
 																		<c:set var="pUrl" scope="request"
@@ -146,7 +146,7 @@
 													</div>
 													<div class = "commentsDiv" id="seeComments${post.mainPost.postid}">
 														<c:forEach var="post1" items="${post.comments}">
-														<div class="panel panel-primary">
+														<div class="panel panel-info">
 														<div class="panel-heading">
 																	<div class="panel-heading">
 																		<c:set var="ppUrl" scope="request"
@@ -154,7 +154,7 @@
 
 																		<table width="100%">
 																			<tr>
-																				<td align="left"><img src="${ppUrl}" />${post1.bhuser.username}</td>
+																				<td align="left"><img src="${ppUrl}" />${post1.bhuser.username} says...</td>
 																				<td align="right"><fmt:formatDate type="date"
 																						value="${post1.postdate}" /></td>
 																			</tr>

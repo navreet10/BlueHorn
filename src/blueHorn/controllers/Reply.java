@@ -45,14 +45,11 @@ public class Reply extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		System.out.println("in");
 		String idPost = request.getParameter("idPost");
 		try {	
 			
 			String postId = idPost.substring(12);
-			System.out.println(postId);
 			String posttext = request.getParameter("posttext");
-			System.out.println(posttext);
 			Bhuser user = (Bhuser)session.getAttribute("user");
 			Bhpost post = new Bhpost();
 			post.setBhuser(user);
@@ -78,8 +75,11 @@ public class Reply extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			System.out.println(posts.size());
-			session.setAttribute("postsHome", posts);
+			if (idPost.contains("home")) {
+				session.setAttribute("postsHome", posts);
+			} else {
+				session.setAttribute("postsNews", posts);
+			}
 
 		} catch (NullPointerException e) {
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
@@ -101,7 +101,11 @@ public class Reply extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			session.setAttribute("postsHome", posts);
+			if (idPost.contains("home")) {
+				session.setAttribute("postsHome", posts);
+			} else {
+				session.setAttribute("postsNews", posts);
+			}
 			
 		} catch (Exception e) {
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
@@ -123,7 +127,11 @@ public class Reply extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			session.setAttribute("postsHome", posts);
+			if (idPost.contains("home")) {
+				session.setAttribute("postsHome", posts);
+			} else {
+				session.setAttribute("postsNews", posts);
+			}
 		}
 	}
 

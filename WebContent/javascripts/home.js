@@ -84,5 +84,61 @@
 		 
 		 
 	 });
+	 
+	 // news feed/////////////////////////
+	 
+	 called = false;
+	 $('.likeLinksN').click(function (event) {
+		 alert( " in");
+		 if (!called) {
+			 var idPost = $(this).attr('id');
+			 var dataString ='idPost='+ idPost;
+			 $.ajax({  
+				    type: "POST",  
+				    url: "Like",
+	             data: dataString,
+	             success: function(data){
+	                 window.location = 'http://localhost:8080/BlueHorn/newsFeed.jsp';
+	               }                
+				  });
+			 called = true;
+		 }
+		 
+		 
+	 });
+	 $('.replyLinksN').click(function (event) {
+			 var idPost = $(this).attr('id');
+			 var id = 'writeReply' + idPost.substring(9);
+			 $("#"+id).show();
+		 
+		 
+	 });
+	 $('.replyButtonN').click(function (event) {
+			 var idPost = $(this).attr('id');
+			 var id = 'replyContenet' + idPost.substring(12);
+			 var dataString ='idPost='+ idPost + "&posttext=" + $ ("#" + id).val();
+			 
+			 $.ajax({  
+				    type: "POST",  
+				    url: "Reply",
+	             data: dataString,
+	             success: function(data){
+	                 window.location = 'http://localhost:8080/BlueHorn/newsFeed.jsp';
+	               }                
+				  });
+			
+		 
+		 
+	 });
+	 $('.commentLinksN').click(function (event) {
+		
+			 var idPost = $(this).attr('id');
+			 var id = 'seeComments'+idPost.substring(8);
+			 
+			 $("#"+id).show();	
+			 
+		 
+		 
+	 });
 }); 
 

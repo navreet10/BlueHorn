@@ -44,7 +44,6 @@ public class Like extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String idPost = request.getParameter("idPost");
-		System.out.println("in");
 		try {	
 			
 			String postId = idPost.substring(8);
@@ -70,7 +69,12 @@ public class Like extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			session.setAttribute("postsHome", posts);
+			if (idPost.contains("home")) {
+				session.setAttribute("postsHome", posts);
+			} else {
+				session.setAttribute("postsNews", posts);
+			}
+			
 
 		} catch (NullPointerException e) {
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
@@ -92,7 +96,11 @@ public class Like extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			session.setAttribute("postsHome", posts);
+			if (idPost.contains("home")) {
+				session.setAttribute("postsHome", posts);
+			} else {
+				session.setAttribute("postsNews", posts);
+			}
 			
 		} catch (Exception e) {
 			Bhuser user = (Bhuser) request.getSession().getAttribute("user");
@@ -114,7 +122,11 @@ public class Like extends HttpServlet {
 					posts.add(postCom);
 				}					
 			}
-			session.setAttribute("postsHome", posts);
+			if (idPost.contains("home")) {
+				session.setAttribute("postsHome", posts);
+			} else {
+				session.setAttribute("postsNews", posts);
+			}
 		}
 	}
 

@@ -61,39 +61,110 @@
 					<br> <br>
 					<div class="col-sm-3"></div>
 					<div class="col-sm-6">
-						<h2>Posts</h2>
+						<h2>News Feed</h2>
 
 						<div class="panel-group">
-							<c:forEach var="post" items="${posts}">
+							<c:forEach var="post" items="${postsNews}">
 								<div class="panel panel-primary">
 									<div class="panel-heading">
-										<c:set var="pUrl" scope="request" value="${post.bhuser.url}20"></c:set>
+										<c:set var="pUrl" scope="request" value="${post.mainPost.bhuser.url}20"></c:set>
+
 										<table width="100%">
 											<tr>
-												<td align="left"><img src="${pUrl}" />${post.bhuser.username}</td>
+												<td align="left"><img src="${pUrl}" />${post.mainPost.bhuser.username}</td>
 												<td align="right"><fmt:formatDate type="date"
-														value="${post.postdate}" /></td>
+														value="${post.mainPost.postdate}" /></td>
 											</tr>
 										</table>
 
 									</div>
 									<div class="panel-body">
-										<c:out value="${post.posttext}"></c:out>
+										<c:out value="${post.mainPost.posttext}"></c:out>
 									</div>
 									<div class="panel-footer">
 										<table width="100%">
 											<tr>
-												<td align="left"><a href="#"> <span
+												<td align="left"><a class="likeLinksN"
+													id="likenews${post.mainPost.postid}" href="#"> <span
 														class="glyphicon glyphicon-heart"></span>
-												</a></td>
+												</a> ${post.mainPost.likes}</td>
 												<td align="right"><span
-													class="glyphicon glyphicon-share-alt"></span> Reply</td>
+													class="glyphicon glyphicon-share-alt"></span> <a
+													id="replynews${post.mainPost.postid}" class="replyLinksN"
+													href="#"> Reply</a> &nbsp;&nbsp; <a id="comments${post.mainPost.postid}" class="commentLinksN" href="#">View
+														Comments</a></td>
+												
 											</tr>
 										</table>
 
 									</div>
+									<div>
+									<table width="100%">
+									<tr><td>
+													<div class = "repliesDiv"
+														id="writeReply${post.mainPost.postid}">
+														<div class="panel panel-info">
+														<div class="panel-heading">
+																	<div class="panel-heading">
+																		<c:set var="pUrl" scope="request"
+																			value="${post.mainPost.bhuser.url}20"></c:set>
+
+																		<table width="100%">
+																			<tr>
+																				<td align="left"><img src="${pUrl}" />${post.mainPost.bhuser.username}</td>
+																				<td align="right"><fmt:formatDate type="date"
+																						value="${post.mainPost.postdate}" /></td>
+																			</tr>
+																		</table>
+																	</div>
+																</div>
+															<div class="panel-body">
+																
+																<textarea maxlength="141" placeholder="Reply...."
+																	id="replyContenet${post.mainPost.postid}"
+																	name="replyContenet"> </textarea>
+															</div>
+															<div class="panel-footer">
+																<a class="replyButtonN"
+																	id="repEnterhome${post.mainPost.postid}" href="#">
+																	Reply</a>
+															</div>
+														</div>
+													</div>
+													<div class = "commentsDiv" id="seeComments${post.mainPost.postid}">
+														<c:forEach var="post1" items="${post.comments}">
+														<div class="panel panel-info">
+														<div class="panel-heading">
+																	<div class="panel-heading">
+																		<c:set var="ppUrl" scope="request"
+																			value="${post1.bhuser.url}20"></c:set>
+
+																		<table width="100%">
+																			<tr>
+																				<td align="left"><img src="${ppUrl}" />${post1.bhuser.username} says...</td>
+																				<td align="right"><fmt:formatDate type="date"
+																						value="${post1.postdate}" /></td>
+																			</tr>
+																		</table>
+																	</div>
+																</div>
+															<div class="panel-body">
+																<table>
+																	<tr>
+																		<td><c:out value="${post1.posttext}"></c:out></td>
+																	</tr>
+																</table>
+															</div>
+														</div>
+														</c:forEach>
+													</div>
+												</td> </tr></table>
+									 </div>
+
+
 								</div>
-								<br><br>
+								<br>
+								<br>
 							</c:forEach>
 
 
@@ -102,8 +173,8 @@
 
 					</div>
 					<div class="col-sm-3"></div>
-					
-				</div>										
+
+				</div>									
 </div>
 
 
